@@ -8,7 +8,10 @@ body {
 #tentacles {
     width: 50px;
 }
-
+h2{
+    text-align: center;
+    font-size: 200%;
+}
 .header {
     display: flex;
     background-color: lightblue;
@@ -49,7 +52,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start; 
+    align-items: stretch; 
     background-color: transparent;
 }
 
@@ -60,14 +63,13 @@ body {
 }
 
 .game-card {
-    display: table;
     flex: 0 0 300px;
     background-color: #FFFFFF;
     padding: 1%;
     margin: 1%;
     text-align: center;
     border-radius: 7px;
-
+    align-items: center;
 }
 
 .game-card:hover {
@@ -86,3 +88,24 @@ button {
     margin: 1%;
     border-radius: 7px;
 }
+  .btn {
+      width: 80px;
+      height: 30px;
+      background: grey;
+      border-radius: 7px;
+      padding: 1px 3px;
+      box-shadow: 1px 1px 1px #000000;
+      display: flex;
+      align-items: center; /* Center the button vertically */
+      justify-content: center; /* Center the button horizontally */
+      font-family: arial;
+      font-size: 14px;
+      line-height: 30px;
+  }
+  .game-card input[type="checkbox"] {
+    display: none;
+  }
+  
+  .game-card label.btn {
+    display: inline-block;
+  }

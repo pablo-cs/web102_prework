@@ -24,7 +24,7 @@ function deleteChildElements(parent) {
 
 // grab the element with the id games-container
 const gamesContainer = document.getElementById("games-container");
-
+const followedGames = []
 // create a function that adds all data from the games array to the page
 function addGamesToPage(games) {
 
@@ -46,6 +46,7 @@ function addGamesToPage(games) {
         // append the game to the games-container
     for(var i = 0; i < games.length;i++){
         var div = document.createElement('div');
+        var followedText = followedGames.includes(games[i]) ? `Unfollow`: `Follow`;
         div.className = 'game-card';
         var display = `
                     <img class="game-img" src="${games[i].img}" alt="Game ${i}">
@@ -53,11 +54,28 @@ function addGamesToPage(games) {
                     <p> ${games[i].description}</p>
                     <p> Goal:$${games[i].goal.toLocaleString()}</p>
                     <p> Pledged:$${games[i].pledged.toLocaleString()}</p>
+                    <input type="checkbox" id="btnControl${i}" />
+                    <label class="btn" for="btnControl${i}">${followedText}</label>
+                    
         `;
         div.innerHTML = display;
+        
         gamesContainer.appendChild(div);
         gamesContainer.classList.add('game-card');
+        var followButton = div.querySelector(`#btnControl${i}`);
+        var label = div.querySelector(`label[for="btnControl${i}"]`);
 
+        followButton.addEventListener("change", (function (index, label) {
+            return function () {
+                if (followedGames.includes(games[index])) {
+                    followedGames.splice(followedGames.indexOf(games[index]), 1);
+                    label.textContent = "Follow";
+                } else {
+                    followedGames.push(games[index]);
+                    label.textContent = "Unfollow";
+                }
+            };
+        })(i, label));
     }
 
 
@@ -66,7 +84,7 @@ function addGamesToPage(games) {
 
 // call the function we just defined using the correct variable
 // later, we'll call this function using a different list of games
-addGamesToPage(GAMES_JSON);
+//addGamesToPage(GAMES_JSON);
 
 /*************************************************************************************
  * Challenge 4: Create the summary statistics at the top of the page displaying the
@@ -135,7 +153,6 @@ function filterFundedOnly() {
     let fundedGames = GAMES_JSON.filter((game) => {
         return game.pledged >= game.goal
     });
-
     // use the function we previously created to add unfunded games to the DOM
     addGamesToPage(fundedGames);
 }
@@ -182,9 +199,10 @@ ${areMultiGamesTotal ? "games" : "game"}. Currently,  ${unfundedGamesSum} ${areM
 
 // create a new DOM element containing the template string and append it to the description container
 const moneyRaisedMessageElem = document.createElement('p');
+moneyRaisedMessageElem.className = 'money-raised-message'
 moneyRaisedMessageElem.innerHTML = `<p> ${moneyRaisedMessage}</p>`;
 descriptionContainer.appendChild(moneyRaisedMessageElem); 
-descriptionContainer.classList.add(moneyRaisedMessageElem);
+descriptionContainer.classList.add('money-raised-message');
 
 /************************************************************************************
  * Challenge 7: Select & display the top 2 games
@@ -200,11 +218,30 @@ const sortedGames =  GAMES_JSON.sort( (item1, item2) => {
 
 // use destructuring and the spread operator to grab the first and second games
 const [firstGame, secondGame, ...rest] = sortedGames;
-
 // create a new element to hold the name of the top pledge game, then append it to the correct element
-const mostFundedElem = document.createElement('h1');
-mostFundedElem.innerHTML = `${firstGame.name}`;
-firstGameContainer.appendChild(mostFundedElem);
-firstGameContainer.classList.add(mostFundedElem);
+const topFundedElem = document.createElement('p');
+topFundedElem.className = 'top-funded'
+topFundedElem.innerHTML = firstGame.name;
+firstGameContainer.appendChild(topFundedElem);
+firstGameContainer.classList.add('top-funded');
 
 // do the same for the runner up item
+
+const runnerUpFundedElem = document.createElement('p');
+runnerUpFundedElem.className = 'runner-up-funded'
+runnerUpFundedElem.innerHTML = secondGame.name;
+secondGameContainer.appendChild(runnerUpFundedElem);
+secondGameContainer.classList.add('runner-up-funded');
+
+/**
+ * Customizations: Follow Button
+ * 
+ */
+
+function showFollowedGames(){
+    deleteChildElements(gamesContainer);
+
+    addGamesToPage(followedGames);
+}
+const followedGamesButton = document.getElementById('followed-btn');
+followedGamesButton.addEventListener("click",showFollowedGames);
