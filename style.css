@@ -50,6 +50,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start; 
+    background-color: transparent;
 }
 
 .game-img {
@@ -59,12 +60,14 @@ body {
 }
 
 .game-card {
+    display: table;
     flex: 0 0 300px;
     background-color: #FFFFFF;
     padding: 1%;
     margin: 1%;
     text-align: center;
     border-radius: 7px;
+
 }
 
 .game-card:hover {
